@@ -105,9 +105,9 @@
         // formData.append('Browser_Info', navigator.userAgent);
         // formData.append('Resolution', `${window.screen.width}x${window.screen.height}`);
         
-        formData.append('IP_Address',"IP_Address111");
-        formData.append('Browser_Info', "Browser_Info111");
-        formData.append('Resolution', "Resolution111");
+        formData.append('IP_Address','IP_Address111');
+        formData.append('Browser_Info', 'Browser_Info111');
+        formData.append('Resolution', 'Resolution111');
         
         fetch(scriptURL, { method: 'POST', body: formData })
             .then(response => {
