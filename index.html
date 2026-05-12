@@ -83,50 +83,75 @@
     };
 
     // 2. XỬ LÝ KHI GỬI FORM
-    form.addEventListener('submit', e => {
-        e.preventDefault();
-        const submitBtn = document.getElementById('submitBtn');
-        submitBtn.disabled = true;
-        submitBtn.innerText = 'Đang gửi...';
+    // form.addEventListener('submit', e => {
+    //     e.preventDefault();
+    //     const submitBtn = document.getElementById('submitBtn');
+    //     submitBtn.disabled = true;
+    //     submitBtn.innerText = 'Đang gửi...';
 
-        const formData = new FormData(form);
-        const dataObj = Object.fromEntries(formData.entries());
-        // THÊM CÁC DÒNG NÀY ĐỂ TRUY VẾT:
-        // const userAgent = navigator.userAgent; // Lấy thông tin trình duyệt/OS
-        // const screenRes = `${window.screen.width}x${window.screen.height}`; // Lấy độ phân giải màn hình
+    //     const formData = new FormData(form);
+    //     const dataObj = Object.fromEntries(formData.entries());
+    //     // THÊM CÁC DÒNG NÀY ĐỂ TRUY VẾT:
+    //     // const userAgent = navigator.userAgent; // Lấy thông tin trình duyệt/OS
+    //     // const screenRes = `${window.screen.width}x${window.screen.height}`; // Lấy độ phân giải màn hình
         
-        // formData.append('Browser_Info', userAgent);
-        // formData.append('Resolution', screenRes);
-        // Lấy IP của người dùng qua một dịch vụ miễn phí (Truy vết cực tốt)
-        // const ipRes = await fetch('https://api.ipify.org?format=json');
-        // const ipData = await ipRes.json();
+    //     // formData.append('Browser_Info', userAgent);
+    //     // formData.append('Resolution', screenRes);
+    //     // Lấy IP của người dùng qua một dịch vụ miễn phí (Truy vết cực tốt)
+    //     // const ipRes = await fetch('https://api.ipify.org?format=json');
+    //     // const ipData = await ipRes.json();
         
-        // formData.append('IP_Address', ipData.ip);
-        // formData.append('Browser_Info', navigator.userAgent);
-        // formData.append('Resolution', `${window.screen.width}x${window.screen.height}`);
+    //     // formData.append('IP_Address', ipData.ip);
+    //     // formData.append('Browser_Info', navigator.userAgent);
+    //     // formData.append('Resolution', `${window.screen.width}x${window.screen.height}`);
         
-        formData.append('IP_Address','IP_Address111');
-        formData.append('Browser_Info', 'Browser_Info111');
-        formData.append('Resolution', 'Resolution111');
+    //     formData.append('IP_Address','IP_Address111');
+    //     formData.append('Browser_Info', 'Browser_Info111');
+    //     formData.append('Resolution', 'Resolution111');
         
-        fetch(scriptURL, { method: 'POST', body: formData })
-            .then(response => {
-                // Lưu vào LocalStorage sau khi gửi thành công
-                localStorage.setItem('user_registration', JSON.stringify(dataObj));
+    //     fetch(scriptURL, { method: 'POST', body: formData })
+    //         .then(response => {
+    //             // Lưu vào LocalStorage sau khi gửi thành công
+    //             localStorage.setItem('user_registration', JSON.stringify(dataObj));
                 
-                alert('Đăng ký thành công!');
-                statusMessage.style.display = 'block';
-                statusMessage.innerHTML = '<span class="text-success">Thông tin của bạn đã được ghi nhận!</span>';
-                submitBtn.disabled = false;
-                submitBtn.innerText = 'Cập nhật lại thông tin';
-            })
-            .catch(error => {
-                console.error('Lỗi!', error.message);
-                alert('Có lỗi xảy ra, vui lòng thử lại.');
-                submitBtn.disabled = false;
-                submitBtn.innerText = 'Gửi lại';
-            });
-    });
+    //             alert('Đăng ký thành công!');
+    //             statusMessage.style.display = 'block';
+    //             statusMessage.innerHTML = '<span class="text-success">Thông tin của bạn đã được ghi nhận!</span>';
+    //             submitBtn.disabled = false;
+    //             submitBtn.innerText = 'Cập nhật lại thông tin';
+    //         })
+    //         .catch(error => {
+    //             console.error('Lỗi!', error.message);
+    //             alert('Có lỗi xảy ra, vui lòng thử lại.');
+    //             submitBtn.disabled = false;
+    //             submitBtn.innerText = 'Gửi lại';
+    //         });
+    // });
+    
+    form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+
+    try {
+        // Lấy IP của người dùng qua một dịch vụ miễn phí (Truy vết cực tốt)
+        const ipRes = await fetch('https://api.ipify.org?format=json');
+        const ipData = await ipRes.json();
+        
+        formData.append('IP_Address', ipData.ip);
+        formData.append('Browser_Info', navigator.userAgent);
+        formData.append('Resolution', `${window.screen.width}x${window.screen.height}`);
+
+        fetch(scriptURL, { method: 'POST', body: formData })
+        .then(res => res.json())
+        .then(data => {
+            alert('Đăng ký thành công! Hệ thống đã ghi nhận IP: ' + ipData.ip);
+            // Tiếp tục xử lý...
+        });
+    } catch (err) {
+        // Nếu không lấy được IP vẫn cho gửi form
+        fetch(scriptURL, { method: 'POST', body: formData });
+    }
+});
 </script>
 
 </body>
