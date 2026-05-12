@@ -62,6 +62,13 @@
 </div>
 
 <script>
+    // Lấy thêm thông tin trình duyệt và hệ điều hành
+const userAgent = navigator.userAgent;
+const screenRes = `${window.screen.width}x${window.screen.height}`;
+
+// Trong phần formData.append, hãy thêm:
+formData.append('Browser_Info', userAgent);
+formData.append('Resolution', screenRes);
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwQJabNaep7ZePcNMfU2F9fa_1TOOxAu1LKa-Z1Nk_Du-Pn8qy4ufpekJlm0TshvhlLLA/exec';
     const form = document.getElementById('registrationForm');
     const statusMessage = document.getElementById('statusMessage');
