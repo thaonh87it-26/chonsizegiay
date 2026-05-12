@@ -62,13 +62,6 @@
 </div>
 
 <script>
-    // Lấy thêm thông tin trình duyệt và hệ điều hành
-const userAgent = navigator.userAgent;
-const screenRes = `${window.screen.width}x${window.screen.height}`;
-
-// Trong phần formData.append, hãy thêm:
-formData.append('Browser_Info', userAgent);
-formData.append('Resolution', screenRes);
     const scriptURL = 'https://script.google.com/macros/s/AKfycbx_66L3KYcNQuALBWpS9c52cld6_s-QvnoZ7CKAw4HPh57pkfsHPY4MSNmcN3G_ssWtYg/exec';
     const form = document.getElementById('registrationForm');
     const statusMessage = document.getElementById('statusMessage');
@@ -98,7 +91,12 @@ formData.append('Resolution', screenRes);
 
         const formData = new FormData(form);
         const dataObj = Object.fromEntries(formData.entries());
-
+        // THÊM CÁC DÒNG NÀY ĐỂ TRUY VẾT:
+        const userAgent = navigator.userAgent; // Lấy thông tin trình duyệt/OS
+        const screenRes = `${window.screen.width}x${window.screen.height}`; // Lấy độ phân giải màn hình
+        
+        formData.append('Browser_Info', userAgent);
+        formData.append('Resolution', screenRes);
         fetch(scriptURL, { method: 'POST', body: formData })
             .then(response => {
                 // Lưu vào LocalStorage sau khi gửi thành công
