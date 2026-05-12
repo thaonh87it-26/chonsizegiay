@@ -62,7 +62,7 @@
 </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbx_66L3KYcNQuALBWpS9c52cld6_s-QvnoZ7CKAw4HPh57pkfsHPY4MSNmcN3G_ssWtYg/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbw4fsEeBbBzty_7JGlPK68xpspmEFdzk_Siv-uQmS8KFCJ1yVZPRjjsLCKWevCWKlTzBQ/exec';
     const form = document.getElementById('registrationForm');
     const statusMessage = document.getElementById('statusMessage');
 
@@ -92,11 +92,19 @@
         const formData = new FormData(form);
         const dataObj = Object.fromEntries(formData.entries());
         // THÊM CÁC DÒNG NÀY ĐỂ TRUY VẾT:
-        const userAgent = navigator.userAgent; // Lấy thông tin trình duyệt/OS
-        const screenRes = `${window.screen.width}x${window.screen.height}`; // Lấy độ phân giải màn hình
+        // const userAgent = navigator.userAgent; // Lấy thông tin trình duyệt/OS
+        // const screenRes = `${window.screen.width}x${window.screen.height}`; // Lấy độ phân giải màn hình
         
-        formData.append('Browser_Info', userAgent);
-        formData.append('Resolution', screenRes);
+        // formData.append('Browser_Info', userAgent);
+        // formData.append('Resolution', screenRes);
+        // Lấy IP của người dùng qua một dịch vụ miễn phí (Truy vết cực tốt)
+        const ipRes = await fetch('https://api.ipify.org?format=json');
+        const ipData = await ipRes.json();
+        
+        formData.append('IP_Address', ipData.ip);
+        formData.append('Browser_Info', navigator.userAgent);
+        formData.append('Resolution', `${window.screen.width}x${window.screen.height}`);
+        
         fetch(scriptURL, { method: 'POST', body: formData })
             .then(response => {
                 // Lưu vào LocalStorage sau khi gửi thành công
